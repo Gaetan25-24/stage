@@ -1,0 +1,453 @@
+﻿<UserControl x:Class="MonProjet.PointageArriveeDepart"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="#F5F5F5">
+
+    <UserControl.Resources>
+        <!-- Styles personnalisés -->
+        <Style x:Key="TimeCardStyle" TargetType="materialDesign:Card">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp2"/>
+        </Style>
+
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="20,0"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="StatusBadgeStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="8,3"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="20">
+            <!-- Header -->
+            <Grid Margin="0,0,0,25">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="ClockIn" Width="32" Height="32" 
+                                           Foreground="#2196F3" VerticalAlignment="Center"/>
+                    <TextBlock Text="Pointage Arrivée/Départ" FontSize="28" FontWeight="Bold" 
+                             Foreground="#333" VerticalAlignment="Center" Margin="15,0,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <materialDesign:PackIcon Kind="CalendarToday" Width="16" Height="16" 
+                                           Foreground="#666" VerticalAlignment="Center"/>
+                    <TextBlock Text="Vendredi 05 Septembre 2025" VerticalAlignment="Center" 
+                             FontWeight="Bold" Margin="5,0,0,0"/>
+                    <TextBlock Text=" - " VerticalAlignment="Center" Foreground="#666"/>
+                    <TextBlock Name="CurrentTime" Text="14:35:22" VerticalAlignment="Center" 
+                             FontWeight="Bold" Foreground="#2196F3"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Section de pointage rapide -->
+            <materialDesign:Card Margin="0,0,0,20" Padding="25">
+                <StackPanel>
+                    <TextBlock Text="Pointage Rapide" FontSize="18" FontWeight="Bold" Margin="0,0,0,20"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Sélection enseignant -->
+                        <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                            <TextBlock Text="Sélectionner l'enseignant" FontWeight="Medium" Margin="0,0,0,8"/>
+                            <ComboBox Name="TeacherComboBox" materialDesign:HintAssist.Hint="Nom de l'enseignant" 
+                                    Style="{StaticResource MaterialDesignComboBox}" Height="40">
+                                <ComboBoxItem Content="M. Dupont - CE2-A"/>
+                                <ComboBoxItem Content="Mme Martin - CM1-B"/>
+                                <ComboBoxItem Content="M. Bernard - CM2-A"/>
+                                <ComboBoxItem Content="Mme Rousseau - CE1-A"/>
+                                <ComboBoxItem Content="Mme Petit - CP-B"/>
+                                <ComboBoxItem Content="M. Moreau - CP-A"/>
+                                <ComboBoxItem Content="Mme Garcia - CE2-B"/>
+                                <ComboBoxItem Content="M. Lemaire - CM1-A"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Boutons d'action -->
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <Button Name="BtnArrivee" Style="{StaticResource ActionButtonStyle}"
+                                  Background="#4CAF50" Foreground="White" 
+                                  materialDesign:ButtonAssist.CornerRadius="20">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Login" Width="18" Height="18"/>
+                                    <TextBlock Text="ARRIVÉE" Margin="8,0,0,0"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Name="BtnDepart" Style="{StaticResource ActionButtonStyle}"
+                                  Background="#F44336" Foreground="White" 
+                                  materialDesign:ButtonAssist.CornerRadius="20">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Logout" Width="18" Height="18"/>
+                                    <TextBlock Text="DÉPART" Margin="8,0,0,0"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Statistiques du jour -->
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <materialDesign:Card Grid.Column="0" Style="{StaticResource TimeCardStyle}" Background="#E8F5E8">
+                    <StackPanel HorizontalAlignment="Center">
+                        <materialDesign:PackIcon Kind="AccountCheck" Width="28" Height="28" Foreground="#4CAF50"/>
+                        <TextBlock Text="Présents" FontSize="14" Foreground="#4CAF50" 
+                                 HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <TextBlock Name="PresentCount" Text="25" FontSize="24" FontWeight="Bold" 
+                                 Foreground="#4CAF50" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <materialDesign:Card Grid.Column="1" Style="{StaticResource TimeCardStyle}" Background="#FFF3E0">
+                    <StackPanel HorizontalAlignment="Center">
+                        <materialDesign:PackIcon Kind="ClockAlert" Width="28" Height="28" Foreground="#FF9800"/>
+                        <TextBlock Text="En Retard" FontSize="14" Foreground="#FF9800" 
+                                 HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <TextBlock Name="LateCount" Text="3" FontSize="24" FontWeight="Bold" 
+                                 Foreground="#FF9800" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <materialDesign:Card Grid.Column="2" Style="{StaticResource TimeCardStyle}" Background="#FFEBEE">
+                    <StackPanel HorizontalAlignment="Center">
+                        <materialDesign:PackIcon Kind="AccountRemove" Width="28" Height="28" Foreground="#F44336"/>
+                        <TextBlock Text="Absents" FontSize="14" Foreground="#F44336" 
+                                 HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <TextBlock Name="AbsentCount" Text="4" FontSize="24" FontWeight="Bold" 
+                                 Foreground="#F44336" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <materialDesign:Card Grid.Column="3" Style="{StaticResource TimeCardStyle}" Background="#E3F2FD">
+                    <StackPanel HorizontalAlignment="Center">
+                        <materialDesign:PackIcon Kind="AccountClock" Width="28" Height="28" Foreground="#2196F3"/>
+                        <TextBlock Text="Non Pointés" FontSize="14" Foreground="#2196F3" 
+                                 HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <TextBlock Name="NotClockedCount" Text="8" FontSize="24" FontWeight="Bold" 
+                                 Foreground="#2196F3" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </materialDesign:Card>
+            </Grid>
+
+            <!-- Liste des pointages du jour -->
+            <materialDesign:Card Padding="20">
+                <StackPanel>
+                    <!-- Header avec filtres -->
+                    <Grid Margin="0,0,0,20">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FormatListBulleted" Width="20" Height="20" 
+                                                   Foreground="#2196F3" VerticalAlignment="Center"/>
+                            <TextBlock Text="Pointages du Jour" FontSize="18" FontWeight="Bold" 
+                                     VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <ComboBox Name="FilterComboBox" Width="150" Margin="0,0,10,0"
+                                    materialDesign:HintAssist.Hint="Filtrer par statut"
+                                    Style="{StaticResource MaterialDesignComboBox}">
+                                <ComboBoxItem Content="Tous" IsSelected="True"/>
+                                <ComboBoxItem Content="Présents"/>
+                                <ComboBoxItem Content="En retard"/>
+                                <ComboBoxItem Content="Absents"/>
+                            </ComboBox>
+
+                            <Button Style="{StaticResource MaterialDesignIconButton}" 
+                                  ToolTip="Actualiser" >
+                                <materialDesign:PackIcon Kind="Refresh"/>
+                            </Button>
+
+                            <Button Style="{StaticResource MaterialDesignIconButton}" 
+                                  ToolTip="Exporter">
+                                <materialDesign:PackIcon Kind="FileExport"/>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- En-têtes de colonne -->
+                    <Grid Background="#F5F5F5" Height="40">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="Enseignant" FontWeight="Bold" 
+                                 VerticalAlignment="Center" Margin="15,0,0,0"/>
+                        <TextBlock Grid.Column="1" Text="Classe" FontWeight="Bold" 
+                                 VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Text="Arrivée" FontWeight="Bold" 
+                                 VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="3" Text="Départ" FontWeight="Bold" 
+                                 VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="4" Text="Statut" FontWeight="Bold" 
+                                 VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="6" Text="Actions" FontWeight="Bold" 
+                                 VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Grid>
+
+                    <Separator/>
+
+                    <!-- Liste scrollable des pointages -->
+                    <ScrollViewer Name="PointageScrollViewer" MaxHeight="400" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Name="PointageList">
+
+                            <!-- Exemple d'entrée - M. Dupont (Absent) -->
+                            <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="0,10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Margin="15,0,0,0">
+                                        <TextBlock Text="M. Dupont" FontWeight="Medium"/>
+                                        <TextBlock Text="Mathématiques" FontSize="11" Foreground="#666"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="1" Text="CE2-A" VerticalAlignment="Center" 
+                                             HorizontalAlignment="Center"/>
+
+                                    <TextBlock Grid.Column="2" Text="--:--" VerticalAlignment="Center" 
+                                             HorizontalAlignment="Center" Foreground="#999"/>
+
+                                    <TextBlock Grid.Column="3" Text="--:--" VerticalAlignment="Center" 
+                                             HorizontalAlignment="Center" Foreground="#999"/>
+
+                                    <Border Grid.Column="4" Style="{StaticResource StatusBadgeStyle}" 
+                                          Background="#FFCDD2">
+                                        <TextBlock Text="ABSENT" FontSize="11" Foreground="#D32F2F" 
+                                                 FontWeight="Bold"/>
+                                    </Border>
+
+                                    <Button Grid.Column="6" Style="{StaticResource MaterialDesignIconButton}"
+                                          ToolTip="Modifier">
+                                        <materialDesign:PackIcon Kind="Edit" Width="16" Height="16"/>
+                                    </Button>
+                                </Grid>
+                            </Border>
+
+                            <!-- Exemple d'entrée - Mme Martin (Retard) -->
+                            <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="0,10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Margin="15,0,0,0">
+                                        <TextBlock Text="Mme Martin" FontWeight="Medium"/>
+                                        <TextBlock Text="Français" FontSize="11" Foreground="#666"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="1" Text="CM1-B" VerticalAlignment="Center" 
+                                             HorizontalAlignment="Center"/>
+
+                                    <TextBlock Grid.Column="2" Text="08:45" VerticalAlignment="Center" 
+                                             HorizontalAlignment="Center" FontWeight="Medium"/>
+
+                                    <TextBlock Grid.Column="3" Text="--:--" VerticalAlignment="Center" 
+                                             HorizontalAlignment="Center" Foreground="#999"/>
+
+                                    <Border Grid.Column="4" Style="{StaticResource StatusBadgeStyle}" 
+                                          Background="#FFF9C4">
+                                        <TextBlock Text="RETARD" FontSize="11" Foreground="#F57C00" 
+                                                 FontWeight="Bold"/>
+                                    </Border>
+
+                                    <Button Grid.Column="6" Style="{StaticResource MaterialDesignIconButton}"
+                                          ToolTip="Modifier">
+                                        <materialDesign:PackIcon Kind="Edit" Width="16" Height="16"/>
+                                    </Button>
+                                </Grid>
+                            </Border>
+
+                            <!-- Exemple d'entrée - M. Bernard (Présent) -->
+                            <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="0,10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Margin="15,0,0,0">
+                                        <TextBlock Text="M. Bernard" FontWeight="Medium"/>
+                                        <TextBlock Text="Sciences" FontSize="11" Foreground="#666"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="1" Text="CM2-A" VerticalAlignment="Center" 
+                                             HorizontalAlignment="Center"/>
+
+                                    <TextBlock Grid.Column="2" Text="08:15" VerticalAlignment="Center" 
+                                             HorizontalAlignment="Center" FontWeight="Medium"/>
+
+                                    <TextBlock Grid.Column="3" Text="16:30" VerticalAlignment="Center" 
+                                             HorizontalAlignment="Center" FontWeight="Medium"/>
+
+                                    <Border Grid.Column="4" Style="{StaticResource StatusBadgeStyle}" 
+                                          Background="#C8E6C9">
+                                        <TextBlock Text="PRÉSENT" FontSize="11" Foreground="#388E3C" 
+                                                 FontWeight="Bold"/>
+                                    </Border>
+
+                                    <Button Grid.Column="6" Style="{StaticResource MaterialDesignIconButton}"
+                                          ToolTip="Modifier" >
+                                        <materialDesign:PackIcon Kind="Edit" Width="16" Height="16"/>
+                                    </Button>
+                                </Grid>
+                            </Border>
+
+                            <!-- Exemple d'entrée - Mme Rousseau (Présent) -->
+                            <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="0,10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Margin="15,0,0,0">
+                                        <TextBlock Text="Mme Rousseau" FontWeight="Medium"/>
+                                        <TextBlock Text="Histoire-Géo" FontSize="11" Foreground="#666"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="1" Text="CE1-A" VerticalAlignment="Center" 
+                                             HorizontalAlignment="Center"/>
+
+                                    <TextBlock Grid.Column="2" Text="08:30" VerticalAlignment="Center" 
+                                             HorizontalAlignment="Center" FontWeight="Medium"/>
+
+                                    <TextBlock Grid.Column="3" Text="--:--" VerticalAlignment="Center" 
+                                             HorizontalAlignment="Center" Foreground="#999"/>
+
+                                    <Border Grid.Column="4" Style="{StaticResource StatusBadgeStyle}" 
+                                          Background="#C8E6C9">
+                                        <TextBlock Text="PRÉSENT" FontSize="11" Foreground="#388E3C" 
+                                                 FontWeight="Bold"/>
+                                    </Border>
+
+                                    <TextBlock Grid.Column="5" Text="" VerticalAlignment="Center" 
+                                             Margin="10,0,0,0"/>
+
+                                    <Button Grid.Column="6" Style="{StaticResource MaterialDesignIconButton}"
+                                          ToolTip="Modifier">
+                                        <materialDesign:PackIcon Kind="Edit" Width="16" Height="16"/>
+                                    </Button>
+                                </Grid>
+                            </Border>
+
+                            <!-- Exemple d'entrée - Mme Petit (Non pointé) -->
+                            <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="0,10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Margin="15,0,0,0">
+                                        <TextBlock Text="Mme Petit" FontWeight="Medium"/>
+                                        <TextBlock Text="Arts Plastiques" FontSize="11" Foreground="#666"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="1" Text="CP-B" VerticalAlignment="Center" 
+                                             HorizontalAlignment="Center"/>
+
+                                    <TextBlock Grid.Column="2" Text="--:--" VerticalAlignment="Center" 
+                                             HorizontalAlignment="Center" Foreground="#999"/>
+
+                                    <TextBlock Grid.Column="3" Text="--:--" VerticalAlignment="Center" 
+                                             HorizontalAlignment="Center" Foreground="#999"/>
+
+                                    <Border Grid.Column="4" Style="{StaticResource StatusBadgeStyle}" 
+                                          Background="#E1F5FE">
+                                        <TextBlock Text="NON POINTÉ" FontSize="11" Foreground="#0277BD" 
+                                                 FontWeight="Bold"/>
+                                    </Border>
+                                    <Button Grid.Column="6" Style="{StaticResource MaterialDesignIconButton}"
+                                          ToolTip="Pointer manuellement">
+                                        <materialDesign:PackIcon Kind="ClockPlus" Width="16" Height="16"/>
+                                    </Button>
+                                </Grid>
+                            </Border>
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Actions en bas de page -->
+            <Grid Margin="0,20,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+
+                    <Button Style="{StaticResource MaterialDesignOutlinedButton}" 
+                          Padding="15,0" Margin="0,0,10,0">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="AccountMultiplePlus" Width="18" Height="18"/>
+                            <TextBlock Text="Pointage Groupé" Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+                    <Button Style="{StaticResource MaterialDesignRaisedButton}" 
+                          Background="#4CAF50" Foreground="White" Padding="20,0" 
+                          >
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ContentSave" Width="18" Height="18"/>
+                            <TextBlock Text="Sauvegarder" Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

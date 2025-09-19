@@ -1,0 +1,179 @@
+﻿<Window x:Class="MonProjet.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Système de Gestion de Pointage - École" Width="1400"
+        WindowState="Maximized"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}">
+
+    <Window.Resources>
+        <!-- Styles personnalisés -->
+        <Style x:Key="MenuButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,15"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#3F51B5"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#303F9F"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="StatCardStyle" TargetType="materialDesign:Card">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp2"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Menu latéral -->
+        <Grid Grid.Column="0" Background="#2196F3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header du menu -->
+            <StackPanel Grid.Row="0" Margin="20" HorizontalAlignment="Center">
+                <materialDesign:PackIcon Kind="School" Width="50" Height="50" Foreground="White"/>
+                <TextBlock Text="Lycée Privé Fivoarana" FontSize="16" FontWeight="Bold" 
+                          Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                <TextBlock Text="L . P . F" FontSize="12" 
+                          Foreground="White" HorizontalAlignment="Center" Opacity="0.8"/>
+            </StackPanel>
+
+            <!-- Navigation menu -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <Button Name="BtnDashboard" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ViewDashboard" Width="20" Height="20" Margin="0,0,15,0"/>
+                            <TextBlock Text="Tableau de Bord" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Separator Background="White" Opacity="0.3" Margin="10,5"/>
+
+                    <!-- Pointage -->
+                    <TextBlock Text="POINTAGE" Foreground="White" Opacity="0.7" Margin="20,10,0,5" FontSize="11" FontWeight="Bold"/>
+
+                    <Button Name="BtnPointageArrivee" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ClockIn" Width="20" Height="20" Margin="0,0,15,0"/>
+                            <TextBlock Text="Pointage Arrivée/Départ" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Name="BtnPointageSurveillance" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Eye" Width="20" Height="20" Margin="0,0,15,0"/>
+                            <TextBlock Text="Pointage Surveillance" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <!-- Planning -->
+                    <TextBlock Text="PLANNING" Foreground="White" Opacity="0.7" Margin="20,15,0,5" FontSize="11" FontWeight="Bold"/>
+
+                    <Button Name="BtnEmploiTemps" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Calendar" Width="20" Height="20" Margin="0,0,15,0"/>
+                            <TextBlock Text="Emploi du Temps" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Name="BtnClasse" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="BookOpenPageVariant" Width="20" Height="20" Margin="0,0,15,0"/>
+                            <TextBlock Text="Gestion des Classes" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Rapports -->
+                    <TextBlock Text="RAPPORTS" Foreground="White" Opacity="0.7" Margin="20,15,0,5" FontSize="11" FontWeight="Bold"/>
+
+                    <Button Name="BtnHistoriqueAbsences" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="History" Width="20" Height="20" Margin="0,0,15,0"/>
+                            <TextBlock Text="Historique d'Absences" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Name="BtnRapportPonctualite" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ClipboardText" Width="20" Height="20" Margin="0,0,15,0"/>
+                            <TextBlock Text="Rapport Ponctualité" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Name="BtnStatistiques" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ChartLine" Width="20" Height="20" Margin="0,0,15,0"/>
+                            <TextBlock Text="Statistiques" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Gestion -->
+                    <TextBlock Text="GESTION" Foreground="White" Opacity="0.7" Margin="20,15,0,5" FontSize="11" FontWeight="Bold"/>
+
+                    <Button Name="BtnProfilsEnseignants" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Account" Width="20" Height="20" Margin="0,0,15,0"/>
+                            <TextBlock Text="Profils Enseignants" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Name="BtnParametres" Style="{StaticResource MenuButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Settings" Width="20" Height="20" Margin="0,0,15,0"/>
+                            <TextBlock Text="Paramètres" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Footer du menu -->
+            <StackPanel Grid.Row="2" Margin="20">
+                <Separator Background="White" Opacity="0.3" Margin="0,0,0,10"/>
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Account" Width="16" Height="16" Foreground="White" Margin="0,0,10,0"/>
+                    <TextBlock Text="Admin Système" FontSize="12" Foreground="White"/>
+                </StackPanel>
+                <TextBlock Text="Connecté" FontSize="10" Foreground="White" Opacity="0.7"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Contenu principal -->
+        <Grid Grid.Column="1" Background="#F5F5F5">
+            <Frame Name="MainFrame" NavigationUIVisibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0"/>
+
+        </Grid>
+    </Grid>
+</Window>

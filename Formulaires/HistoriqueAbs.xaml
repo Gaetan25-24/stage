@@ -1,0 +1,442 @@
+﻿<UserControl x:Class="MonProjet.HistoriqueAbs"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:MonProjet">
+    <UserControl.Resources>
+        <!-- Styles personnalisés -->
+        <Style x:Key="AbsenceCardStyle" TargetType="materialDesign:Card">
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp2"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp4"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="FilterChipStyle" TargetType="Border">
+            <Setter Property="Background" Value="#E0E0E0"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Margin" Value="0,0,8,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Style.Triggers>
+                <Trigger Property="Tag" Value="Active">
+                    <Setter Property="Background" Value="#2196F3"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="StatIconStyle" TargetType="materialDesign:PackIcon">
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#F5F5F5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header avec navigation par onglets -->
+        <Grid Grid.Row="0" Background="White"
+              materialDesign:ElevationAssist.Elevation="Dp1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Titre principal -->
+            <Grid Grid.Row="0" Margin="0,0,0,20">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="History" Width="32" Height="32" 
+                                           Foreground="#2196F3" VerticalAlignment="Center"/>
+                    <TextBlock Text="Historique d'Absences" FontSize="28" FontWeight="Bold" 
+                             Foreground="#333" VerticalAlignment="Center" Margin="15,0,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource MaterialDesignIconButton}" Margin="5">
+                        <materialDesign:PackIcon Kind="Settings" Width="20" Height="20"/>
+                    </Button>
+                    <Button Style="{StaticResource MaterialDesignIconButton}" Margin="5">
+                        <materialDesign:PackIcon Kind="FilterVariant" Width="20" Height="20"/>
+                    </Button>
+                    <Button Style="{StaticResource MaterialDesignIconButton}" Margin="5">
+                        <materialDesign:PackIcon Kind="Download" Width="20" Height="20"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <!-- Navigation par onglets -->
+            <TabControl Grid.Row="1" Style="{StaticResource MaterialDesignTabControl}" 
+                       materialDesign:ColorZoneAssist.Mode="PrimaryMid" Name="MainTabControl">
+                <TabItem Header="Vue d'ensemble" Name="OverviewTab">
+                    <TabItem.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ViewDashboard" Width="16" Height="16" 
+                                                       VerticalAlignment="Center"/>
+                                <TextBlock Text="Vue d'ensemble" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </TabItem.HeaderTemplate>
+                </TabItem>
+
+                <TabItem Header="Timeline" Name="TimelineTab">
+                    <TabItem.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Timeline" Width="16" Height="16" 
+                                                       VerticalAlignment="Center"/>
+                                <TextBlock Text="Timeline" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </TabItem.HeaderTemplate>
+                </TabItem>
+
+                <TabItem Header="Analyses" Name="AnalyticsTab">
+                    <TabItem.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ChartLine" Width="16" Height="16" 
+                                                       VerticalAlignment="Center"/>
+                                <TextBlock Text="Analyses" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </TabItem.HeaderTemplate>
+                </TabItem>
+            </TabControl>
+        </Grid>
+
+        <!-- Contenu principal -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="20">
+            <Grid Name="MainContent">
+                <Grid Name="OverviewContent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="350"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Contenu principal gauche -->
+                    <StackPanel Grid.Column="0" Margin="0,0,15,0">
+
+                        <!-- Métriques rapides -->
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Métrique 1 -->
+                            <materialDesign:Card Grid.Column="0" Margin="0,0,8,0" Padding="20" Background="White" Width="180">
+                                <StackPanel>
+                                    <Grid>
+                                        <materialDesign:PackIcon Kind="CalendarRemove" 
+                                                               Style="{StaticResource StatIconStyle}" 
+                                                               Foreground="#F44336" HorizontalAlignment="Left"/>
+                                        <StackPanel HorizontalAlignment="Right">
+                                            <TextBlock Text="127" FontSize="24" FontWeight="Bold" 
+                                                     Foreground="#F44336" HorizontalAlignment="Right"/>
+                                            <TextBlock Text="+12%" FontSize="12" Foreground="#4CAF50" 
+                                                     HorizontalAlignment="Right"/>
+                                        </StackPanel>
+                                    </Grid>
+                                    <TextBlock Text="Total Absences" FontSize="14" Foreground="#666" 
+                                             Margin="0,8,0,0"/>
+                                    <TextBlock Text="Ce mois" FontSize="11" Foreground="#999"/>
+                                </StackPanel>
+                            </materialDesign:Card>
+                        </Grid>
+
+                        <!-- Graphique de tendance -->
+                        <materialDesign:Card Margin="0,0,0,20" Padding="20" Background="White">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                    <materialDesign:PackIcon Kind="ChartAreaspline" Width="24" Height="24" 
+                                                           Foreground="#2196F3" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Évolution des Absences (30 derniers jours)" 
+                                             FontSize="18" FontWeight="Bold" VerticalAlignment="Center" 
+                                             Margin="10,0,0,0"/>
+                                </StackPanel>
+
+                                <!-- Graphique simplifié -->
+                                <Grid Height="200" Background="#FAFAFA" Margin="0,10,0,0">
+                                    <Canvas>
+                                        <!-- Grille de fond -->
+                                        <Line X1="0" Y1="40" X2="600" Y2="40" Stroke="#E0E0E0" StrokeThickness="1" StrokeDashArray="2,2"/>
+                                        <Line X1="0" Y1="80" X2="600" Y2="80" Stroke="#E0E0E0" StrokeThickness="1" StrokeDashArray="2,2"/>
+                                        <Line X1="0" Y1="120" X2="600" Y2="120" Stroke="#E0E0E0" StrokeThickness="1" StrokeDashArray="2,2"/>
+                                        <Line X1="0" Y1="160" X2="600" Y2="160" Stroke="#E0E0E0" StrokeThickness="1" StrokeDashArray="2,2"/>
+
+                                        <!-- Courbe des absences -->
+                                        <Path Stroke="#F44336" StrokeThickness="3" Fill="Transparent">
+                                            <Path.Data>
+                                                <PathGeometry>
+                                                    <PathFigure StartPoint="20,140">
+                                                        <PolyBezierSegment Points="80,120 120,100 160,110 200,95 240,85 280,90 320,75 360,80 400,70 440,65 480,60 520,55 560,50"/>
+                                                    </PathFigure>
+                                                </PathGeometry>
+                                            </Path.Data>
+                                        </Path>
+
+                                        <!-- Zone sous la courbe -->
+                                        <Path Fill="#FFEBEE" Opacity="0.3">
+                                            <Path.Data>
+                                                <PathGeometry>
+                                                    <PathFigure StartPoint="20,140">
+                                                        <PolyBezierSegment Points="80,120 120,100 160,110 200,95 240,85 280,90 320,75 360,80 400,70 440,65 480,60 520,55 560,50"/>
+                                                        <LineSegment Point="560,180"/>
+                                                        <LineSegment Point="20,180"/>
+                                                    </PathFigure>
+                                                </PathGeometry>
+                                            </Path.Data>
+                                        </Path>
+
+                                        <!-- Points de données -->
+                                        <Ellipse Canvas.Left="18" Canvas.Top="138" Width="4" Height="4" Fill="#F44336"/>
+                                        <Ellipse Canvas.Left="158" Canvas.Top="108" Width="4" Height="4" Fill="#F44336"/>
+                                        <Ellipse Canvas.Left="278" Canvas.Top="88" Width="4" Height="4" Fill="#F44336"/>
+                                        <Ellipse Canvas.Left="398" Canvas.Top="68" Width="4" Height="4" Fill="#F44336"/>
+                                        <Ellipse Canvas.Left="558" Canvas.Top="48" Width="4" Height="4" Fill="#F44336"/>
+                                    </Canvas>
+
+                                    <!-- Légendes des axes -->
+                                    <Grid>
+                                        <TextBlock Text="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" 
+                                                 Margin="15,-15,0,0" FontSize="10" Foreground="#666"/>
+                                        <TextBlock Text="Semaine 1" HorizontalAlignment="Left" VerticalAlignment="Bottom" 
+                                                 Margin="140,5,0,0" FontSize="10" Foreground="#666"/>
+                                        <TextBlock Text="Semaine 2" HorizontalAlignment="Left" VerticalAlignment="Bottom" 
+                                                 Margin="280,5,0,0" FontSize="10" Foreground="#666"/>
+                                        <TextBlock Text="Semaine 3" HorizontalAlignment="Left" VerticalAlignment="Bottom" 
+                                                 Margin="420,5,0,0" FontSize="10" Foreground="#666"/>
+                                        <TextBlock Text="Semaine 4" HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                                                 Margin="0,5,20,0" FontSize="10" Foreground="#666"/>
+                                    </Grid>
+                                </Grid>
+                            </StackPanel>
+                        </materialDesign:Card>
+
+                        <materialDesign:Card Padding="20" Background="White" Margin="0,0,0,10">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="25,0,0,15">
+                                    <TextBlock Text="Plus d'Absences" FontSize="16" FontWeight="Bold" 
+                                             VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                </StackPanel>
+
+                                <StackPanel>
+                                    <!-- Enseignant 1 -->
+                                    <Grid Margin="0,0,0,15">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="1" FontSize="18" FontWeight="Bold" 
+                                                 Foreground="#F44336" HorizontalAlignment="Center" 
+                                                 VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="M. Dupont" FontWeight="Medium"/>
+                                            <TextBlock Text="CE2-A" FontSize="11" Foreground="#666"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                                            <TextBlock Text="12" FontWeight="Bold" Foreground="#F44336" 
+                                                     HorizontalAlignment="Right"/>
+                                            <TextBlock Text="absences" FontSize="10" Foreground="#666" 
+                                                     HorizontalAlignment="Right"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- Enseignant 2 -->
+                                    <Grid Margin="0,0,0,15">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="2" FontSize="18" FontWeight="Bold" 
+                                                 Foreground="#FF9800" HorizontalAlignment="Center" 
+                                                 VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Mme Martin" FontWeight="Medium"/>
+                                            <TextBlock Text="CM1-B" FontSize="11" Foreground="#666"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                                            <TextBlock Text="8" FontWeight="Bold" Foreground="#FF9800" 
+                                                     HorizontalAlignment="Right"/>
+                                            <TextBlock Text="absences" FontSize="10" Foreground="#666" 
+                                                     HorizontalAlignment="Right"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- Enseignant 3 -->
+                                    <Grid Margin="0,0,0,15">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="3" FontSize="18" FontWeight="Bold" 
+                                                 Foreground="#FFC107" HorizontalAlignment="Center" 
+                                                 VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="M. Bernard" FontWeight="Medium"/>
+                                            <TextBlock Text="CM2-A" FontSize="11" Foreground="#666"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                                            <TextBlock Text="6" FontWeight="Bold" Foreground="#FFC107" 
+                                                     HorizontalAlignment="Right"/>
+                                            <TextBlock Text="absences" FontSize="10" Foreground="#666" 
+                                                     HorizontalAlignment="Right"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </StackPanel>
+
+                        </materialDesign:Card>
+                    </StackPanel>
+
+                    <!-- Sidebar droite -->
+                    <StackPanel Grid.Column="1">
+
+                        <!-- Filtres rapides -->
+                        <materialDesign:Card Margin="0,0,0,20" Padding="20" Background="White">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                    <materialDesign:PackIcon Kind="FilterVariant" Width="20" Height="20" 
+                                                           Foreground="#2196F3" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Filtres Rapides" FontSize="16" FontWeight="Bold" 
+                                             VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                </StackPanel>
+
+                                <WrapPanel>
+                                    <Border Style="{StaticResource FilterChipStyle}" Tag="Active">
+                                        <TextBlock Text="Aujourd'hui" Foreground="White" FontSize="12"/>
+                                    </Border>
+                                    <Border Style="{StaticResource FilterChipStyle}">
+                                        <TextBlock Text="Cette semaine" Foreground="#666" FontSize="12"/>
+                                    </Border>
+                                    <Border Style="{StaticResource FilterChipStyle}">
+                                        <TextBlock Text="Ce mois" Foreground="#666" FontSize="12"/>
+                                    </Border>
+                                </WrapPanel>
+                            </StackPanel>
+                        </materialDesign:Card>
+
+                        <materialDesign:Card Margin="0,0,0,20" Padding="20" Background="White">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <materialDesign:PackIcon Kind="ClipboardList" Width="24" Height="24" 
+                                                           Foreground="#2196F3" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Absences Récentes" FontSize="18" FontWeight="Bold" 
+                                             VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                    <Border Background="#E3F2FD" CornerRadius="12" Padding="8,4" Margin="15,0,0,0">
+                                        <TextBlock Text="Dernières 24h" FontSize="11" Foreground="#1976D2"/>
+                                    </Border>
+                                </StackPanel>
+
+                                <ScrollViewer MaxHeight="400" VerticalScrollBarVisibility="Auto">
+                                    <StackPanel Name="AbsencesList">
+
+                                        <!-- Carte d'absence 1 -->
+                                        <materialDesign:Card Style="{StaticResource AbsenceCardStyle}" Background="#FFEBEE">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <!-- Informations principales -->
+                                                <StackPanel Grid.Column="1">
+                                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                                        <TextBlock Text="M. Dupont" FontSize="16" FontWeight="Bold"/>
+                                                        <materialDesign:PackIcon Kind="Circle" Width="6" Height="6" 
+                                                                               Foreground="#666" VerticalAlignment="Center" 
+                                                                               Margin="10,0"/>
+                                                        <TextBlock Text="CE2-A" FontSize="12" Foreground="#666" 
+                                                                 VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <TextBlock Text="Mathématiques • 08:30-10:00" FontSize="12" 
+                                                             Foreground="#666" Margin="0,0,0,5"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <materialDesign:PackIcon Kind="Clock" Width="14" Height="14" 
+                                                                               Foreground="#666" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="Il y a 2h" FontSize="12" Foreground="#666" 
+                                                                 Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+
+                                                <!-- Actions -->
+                                                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                                    <Button Style="{StaticResource MaterialDesignIconButton}" 
+                                                          ToolTip="Plus d'options">
+                                                        <materialDesign:PackIcon Kind="DotsVertical" Width="20" Height="20"/>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Grid>
+                                        </materialDesign:Card>
+
+                                        <!-- Carte d'absence 2 -->
+                                        <materialDesign:Card Style="{StaticResource AbsenceCardStyle}" Background="#FFF3E0">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+
+                                                <StackPanel Grid.Column="1">
+                                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                                        <TextBlock Text="Mme Martin" FontSize="16" FontWeight="Bold"/>
+                                                        <materialDesign:PackIcon Kind="Circle" Width="6" Height="6" 
+                                                                               Foreground="#666" VerticalAlignment="Center" 
+                                                                               Margin="10,0"/>
+                                                        <TextBlock Text="CM1-B" FontSize="12" Foreground="#666" 
+                                                                 VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <TextBlock Text="Français • 09:30-11:00" FontSize="12" 
+                                                             Foreground="#666" Margin="0,0,0,5"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <materialDesign:PackIcon Kind="Clock" Width="14" Height="14" 
+                                                                               Foreground="#666" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="Il y a 4h" FontSize="12" Foreground="#666" 
+                                                                 Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+
+                                                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                                    <Button Style="{StaticResource MaterialDesignIconButton}" 
+                                                          ToolTip="Plus d'options">
+                                                        <materialDesign:PackIcon Kind="DotsVertical" Width="20" Height="20"/>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Grid>
+                                        </materialDesign:Card>
+
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </StackPanel>
+                        </materialDesign:Card>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
